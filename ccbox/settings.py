@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
+import datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,14 +35,51 @@ INSTALLED_APPS = [
     'file.apps.FileConfig',
     'folder.apps.FolderConfig',
     'user.apps.UserConfig',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework'
+
+    'rest_framework',
+    'rest_framework_simplejwt',
 ]
+
+# jwt 관련 setting
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.AllowAny',
+    ),
+
+    # request, response json 형식 camelCase로 변경
+    # 'DEFAULT_RENDERER_CLASSES': (
+    #     'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+    #     'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
+    # ),
+    #
+    # 'DEFAULT_PARSER_CLASSES': (
+    #     'djangorestframework_camel_case.parser.CamelCaseFormParser',
+    #     'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
+    #     'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+    # ),
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+# 추가적인 JWT_AUTH 설젇
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=99), # 유효기간 설정
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=99), # JWT 토큰 갱신 유효기간
+    'SIGNING_KEY': SECRET_KEY,
+    'ALGORITHM': 'HS256', # 암호화 알고리즘
+    'ROTATE_REFRESH_TOKENS': True, # refresh 사용 여부
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
