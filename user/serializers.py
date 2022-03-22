@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+
 class GetUserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
@@ -16,12 +17,12 @@ class CreateUserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['username', 'email', 'password']
 
     def create(self, validated_data):
-        user = User.objects.create(
+        return User.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
             password=make_password(validated_data['password'])
         )
-        return user
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
