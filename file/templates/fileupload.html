@@ -1,0 +1,9 @@
+{% block content %}
+<div class="container">
+    <form method="POST" action="{% url 'fileupload' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="uploadedFile">
+        <input type="submit" value="제출">
+    </form>
+</div>
+{% endblock%}
