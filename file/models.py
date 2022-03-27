@@ -8,3 +8,13 @@ class File(models.Model):
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE, null=True)
     url = models.FileField(upload_to="")
     allowed_users = models.ManyToManyField(User, related_name="allowed_file", null=True)
+
+    list = models.Manager()
+
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "upload_user": self.upload_user,
+            "url": self.url,
+            "allowed_users": self.allowed_users
+        }

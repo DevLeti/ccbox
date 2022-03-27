@@ -3,9 +3,9 @@ from django.conf.urls.static import static
 from django.urls import path
 
 from . import views
-from .views import fileUpload
+from .views import fileUpload, getFileList
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('fileupload/', fileUpload, name='fileupload')
+    path('', getFileList, name='getFileList'),
+    path('upload/', fileUpload, name='fileupload')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
