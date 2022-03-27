@@ -1,9 +1,5 @@
 from django.db import models
 
 
-# Create your models here.
-
 # class User(models.Model):
-#     email = models.CharField(max_length=255)
-#     password = models.CharField(max_length=255)
-#     name = models.CharField(max_length=255)
+#     User model은 django 기본 모델을 사용합니다.

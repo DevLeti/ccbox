@@ -26,12 +26,23 @@ class LoginUserAPI(GenericAPIView):
             }
         )
 
-class GetUserAPI(ListAPIView):
+
+class GetUserInfoAPI(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = GetUserSerializer
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        try:
+            res = Response(serializer.data[0])
+        except:
+            res = Response(serializer.data)
+        return res
+
     def get_queryset(self):
         return User.objects.filter(id=self.request.user.id)
+
 
 class CreateUserAPI(CreateAPIView):
     permission_classes = [AllowAny]
