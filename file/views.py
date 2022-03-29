@@ -1,42 +1,27 @@
-from django.contrib.auth.models import User
-from django.core import serializers
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
-from django.shortcuts import render
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from rest_framework.generics import ListAPIView
+from rest_framework.views import APIView
 
 from .models import File
+from .serializers import GetFileSerializer
 
-JWT_authenticator = JWTAuthentication()
-@csrf_exempt
-def fileUpload(request):
-    if request.method == 'POST':
-        user_info = JWT_authenticator.authenticate(request)
-        if(user_info == None):
-            return HttpResponseBadRequest("User Authorization Failed.")
 
-        user_id=user_info[1]['user_id']
-        user = User.objects.get(pk=user_id)
+class UploadFileAPI(APIView):
+    serializer_class = GetFileSerializer
 
-        url = request.FILES["uploadedFile"]
+    def post(self, request):
+        url = request.FILES['file']
         fileupload = File(
-            upload_user=user,
+            upload_user=request.user,
             url=url,
         )
         fileupload.save()
-        return render(request, 'uploadsuccess.html')
-    else:
-        return HttpResponseNotAllowed(['POST'],content='Not Allowed Request Method.')
+        return JsonResponse({"result": "success"})
 
-def getFileList(request):
-    if request.method == 'GET':
-        user_info = JWT_authenticator.authenticate(request)
-        if (user_info == None):
-            return HttpResponseBadRequest("User Authorization Failed.")
 
-        user_id = user_info[1]['user_id']
+class ListFilesView(ListAPIView):
+    serializer_class = GetFileSerializer
 
-        file_list = serializers.serialize('json', File.list.filter(upload_user=user_id))
-        return HttpResponse(file_list, content_type='application/json')
-    else:
-        return HttpResponseNotAllowed(['POST'],content='Not Allowed Request Method.')
+    def get_queryset(self):
+        user_id = self.request.user
+        return File.list.filter(upload_user=user_id)
