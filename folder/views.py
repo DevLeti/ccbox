@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 
@@ -5,22 +6,26 @@ from folder.models import Folder
 from folder.serializers import GetFolderSerializer
 
 
-class UploadFileAPI(APIView):
+class NewFolderAPI(APIView):
     serializer_class = GetFolderSerializer
 
     def post(self, request):
-        url = request.FILES['file']
+        parent_string = request.POST['parent']
+        parent_query = Folder.objects.get(name=parent_string)
+        print(parent_query)
+        name = request.POST['name']
         fileupload = Folder(
-            upload_user=request.user,
-            url=url,
+            user=request.user,
+            parent=parent_query,
+            name=name,
         )
         fileupload.save()
         return JsonResponse({"result": "success"})
 
 
-class ListFilesView(ListAPIView):
+class ListFoldersView(ListAPIView):
     serializer_class = GetFolderSerializer
 
     def get_queryset(self):
         user_id = self.request.user
-        return Folder.list.filter(upload_user=user_id)
+        return Folder.objects.filter(user_id=user_id)
