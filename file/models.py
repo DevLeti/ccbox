@@ -10,12 +10,4 @@ class File(models.Model):
     allowed_users = models.ManyToManyField(User, related_name="allowed_file", null=True)
     file_name = models.CharField(max_length=127, null=True)
 
-    list = models.Manager()
-
-    def as_dict(self):
-        return {
-            "id": self.id,
-            "upload_user": self.upload_user,
-            "url": self.url,
-            "allowed_users": self.allowed_users
-        }
+    objects = models.Manager()
