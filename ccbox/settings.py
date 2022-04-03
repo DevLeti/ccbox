@@ -76,11 +76,11 @@ REST_FRAMEWORK = {
 
 # 추가적인 JWT_AUTH 설젇
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=99), # 유효기간 설정
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=99), # JWT 토큰 갱신 유효기간
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=99),  # 유효기간 설정
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=99),  # JWT 토큰 갱신 유효기간
     'SIGNING_KEY': SECRET_KEY,
-    'ALGORITHM': 'HS256', # 암호화 알고리즘
-    'ROTATE_REFRESH_TOKENS': True, # refresh 사용 여부
+    'ALGORITHM': 'HS256',  # 암호화 알고리즘
+    'ROTATE_REFRESH_TOKENS': True,  # refresh 사용 여부
 }
 
 MIDDLEWARE = [
