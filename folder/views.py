@@ -20,7 +20,9 @@ class NewFolderAPI(APIView):
             name=name,
         )
         fileupload.save()
-        return JsonResponse({"result": "success"})
+
+        serializer = GetFolderSerializer(fileupload)
+        return JsonResponse(serializer.data)
 
 
 class ListFoldersView(ListAPIView):
