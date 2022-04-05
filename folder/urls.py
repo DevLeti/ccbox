@@ -2,9 +2,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 
-from .views import ListFilesAPI, UploadFileAPI
+from .views import ListFoldersAPI, NewFolderAPI
 
 urlpatterns = [
-    path('', ListFilesAPI.as_view(), name='getFileList'),
-    path('upload/', UploadFileAPI.as_view(), name='fileupload')
+    path('', ListFoldersAPI.as_view(), name='getFolderList'),
+    path('new/', NewFolderAPI.as_view(), name='NewFolder')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

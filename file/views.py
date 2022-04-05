@@ -19,9 +19,9 @@ class UploadFileAPI(APIView):
         return JsonResponse({"result": "success"})
 
 
-class ListFilesView(ListAPIView):
+class ListFilesAPI(ListAPIView):
     serializer_class = GetFileSerializer
 
     def get_queryset(self):
         user_id = self.request.user
-        return File.list.filter(upload_user=user_id)
+        return File.objects.filter(upload_user=user_id)
