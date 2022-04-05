@@ -19,7 +19,7 @@ class UploadFileAPI(APIView):
         return JsonResponse({"result": "success"})
 
 
-class ListFilesView(ListAPIView):
+class ListFilesAPI(ListAPIView):
     serializer_class = GetFileSerializer
 
     def get_queryset(self):

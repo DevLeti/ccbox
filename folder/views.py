@@ -10,9 +10,9 @@ class NewFolderAPI(APIView):
     serializer_class = GetFolderSerializer
 
     def post(self, request):
+        # TODO : get_queryset 으로 코드 간결화
         parent_string = request.POST['parent']
         parent_query = Folder.objects.get(name=parent_string)
-        print(parent_query)
         name = request.POST['name']
         fileupload = Folder(
             user=request.user,
@@ -25,7 +25,7 @@ class NewFolderAPI(APIView):
         return JsonResponse(serializer.data)
 
 
-class ListFoldersView(ListAPIView):
+class ListFoldersAPI(ListAPIView):
     serializer_class = GetFolderSerializer
 
     def get_queryset(self):
