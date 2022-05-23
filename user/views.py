@@ -4,6 +4,7 @@ from rest_framework.generics import ListAPIView, CreateAPIView, GenericAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+from folder.models import Folder
 from user.serializers import GetUserSerializer, CreateUserSerializer, MyTokenObtainPairSerializer
 
 
@@ -47,3 +48,11 @@ class GetUserInfoAPI(ListAPIView):
 class CreateUserAPI(CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = CreateUserSerializer
+    def post(self, request, *args, **kwargs):
+        self.create(request, *args, **kwargs)
+        fileupload = Folder(
+            user=User.objects.get(username=request.data["username"]),
+            name='root'
+        )
+        fileupload.save()
+        return Response({'register success.'})

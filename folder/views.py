@@ -11,18 +11,32 @@ class NewFolderAPI(APIView):
 
     def post(self, request):
         # TODO : get_queryset 으로 코드 간결화
-        parent_string = request.POST['parent']
-        parent_query = Folder.objects.get(name=parent_string)
         name = request.POST['name']
-        fileupload = Folder(
-            user=request.user,
-            parent=parent_query,
-            name=name,
-        )
-        fileupload.save()
+        try:
+            parent_folder_name = request.POST['parent']
+            parent_query = Folder.objects.get(name=parent_folder_name, user_id=request.user)
+            new_folder = Folder(
+                user=request.user,
+                parent=parent_query,
+                name=name,
+            )
+        except:
+            new_folder = Folder(
+                user=request.user,
+                name=name,
+            )
 
-        serializer = GetFolderSerializer(fileupload)
+        new_folder.save()
+        serializer = GetFolderSerializer(new_folder)
         return JsonResponse(serializer.data)
+
+    def delete(self, request):
+        folder_name = request.data['folder_name']
+        model = Folder.objects.get(name=folder_name, user_id=request.user)
+        model.delete()
+        return JsonResponse({"result": "success"})
+
+
 
 
 class ListFoldersAPI(ListAPIView):
